@@ -1,5 +1,6 @@
 package edu.cnm.deepdive.animals.controller;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -26,25 +27,19 @@ public class MainActivity extends AppCompatActivity {
     new Retriever().start();
   }
 
-  private class Retriever extends Thread {
+  private class RetrieverTask extends AsyncTask<Void, Void, List<Animal>> {
+
 
     @Override
-    public void run() {
+    protected List<Animal> doInBackground(Void... voids) {
       try {
         Response<List<Animal>> response = WebServiceProxy.getInstance()
             .getAnimals()
             .execute();
         if (response.isSuccessful()) {
           Log.d(getClass().getName(), response.body().toString());
-          List<Animal> animals = response.body();
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              adapter = new ArrayAdapter<>(
-                  MainActivity.this, R.layout.support_simple_spinner_dropdown_item, animals);
-              animalSelector.setAdapter(adapter);
-            }
-          });
+
+          return response.body();
         } else {
           Log.e(getClass().getName(), response.message());
         }
@@ -53,5 +48,17 @@ public class MainActivity extends AppCompatActivity {
       }
 
     }
+
+    @Override
+    protected void onPostExecute(List<Animal> animals) {
+      super.onPostExecute(animals);
+      adapter = new ArrayAdapter<>(
+          MainActivity.this, R.layout.item_animal_spinner, animals);
+      adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+      animalSelector.setAdapter(adapter);
+    }
   }
 }
+  }
+
+      }

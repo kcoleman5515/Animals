@@ -2,11 +2,14 @@ package edu.cnm.deepdive.animals.controller;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.google.android.material.navigation.NavigationBarView.OnItemSelectedListener;
 import com.squareup.picasso.Picasso;
 import edu.cnm.deepdive.animals.BuildConfig;
 import edu.cnm.deepdive.animals.R;
@@ -27,6 +30,21 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     animalSelector = findViewById(R.id.animal_selector);
+    animalSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        Animal animal = (Animal) adapterView.getItemAtPosition(position);
+        if(animal.getImageUrl() != null) {
+          Picasso.get().load(String.format(BuildConfig.CONTENT_FORMAT, animal.getImageUrl()))
+          .into((ImageView)findViewById(R.id.image));
+        }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> adapterView) {
+
+      }
+    });
     new RetrieverTask().execute();
   }
 

@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     animalSelector = findViewById(R.id.animal_selector);
-    new Retriever().start();
   }
 
   private class RetrieverTask extends AsyncTask<Void, Void, List<Animal>> {
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
       } catch (IOException e) {
         Log.e(getClass().getName(), e.getMessage(), e);
       }
-
+return null;
     }
 
     @Override
@@ -59,6 +58,5 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 }
-  }
 
-      }
+

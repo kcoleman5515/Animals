@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 
@@ -41,6 +42,7 @@ public interface WebServiceProxy {
           .baseUrl(BuildConfig.BASE_URL)
           .addConverterFactory(GsonConverterFactory.create(gson))
           .client(client)
+          .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
           .build();
       INSTANCE = retrofit.create(WebServiceProxy.class);
 
